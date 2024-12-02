@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horse Auction - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #000, #333);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            animation: titlePop 1s ease-in-out;
+        }
+
+        @keyframes titlePop {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: #fff;
+            border-radius: 2px;
+            animation: lineGrow 1s ease-in-out 0.2s;
+        }
+
+        @keyframes lineGrow {
+            from {
+                width: 0;
+            }
+            to {
+                width: 60%;
+            }
+        }
+
+        .container {
+            max-width: 400px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-control {
+            border: 1px solid #555;
+            background: #222;
+            color: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #888;
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            background: #444;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #555;
+        }
+
+        .btn-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-link:hover {
+            color: #ccc;
+            text-decoration: underline;
+        }
+
+        .error-message {
+            display: none;
+            color: #f00;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 10px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Horse Auction</div>
+    <div class="container">
+        <h3 class="text-center mb-4">Login</h3>
+        <form id="loginForm">
+            <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+            
+            <p class="text-center mt-1">
+                <a href="/signup" class="btn-link">Don't have an account? Sign Up</a>
+            </p>
+        </form>
+        <div class="error-message" id="errorMessage">Invalid credentials. Please try again.</div>
+        <div class="loading" id="loadingMessage">Validating...</div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const errorMessage = document.getElementById('errorMessage');
+    const loadingMessage = document.getElementById('loadingMessage');
+
+    errorMessage.style.display = 'none';
+    loadingMessage.style.display = 'block';
+
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            window.location.href = '/home'; // Redirect to dashboard or desired page
+        } else if (response.status === 401) {
+            errorMessage.textContent = 'Incorrect email or password.';
+            errorMessage.style.display = 'block';
+        } else {
+            errorMessage.textContent = result.message || 'Unexpected error occurred.';
+            errorMessage.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        errorMessage.textContent = 'An error occurred. Please try again.';
+        errorMessage.style.display = 'block';
+    } finally {
+        loadingMessage.style.display = 'none';
+    }
+});
+
+    </script>
+</body>
+</html>

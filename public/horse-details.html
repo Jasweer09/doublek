@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horse Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .horse-details {
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
+            background: #2d3748;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .horse-details img {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            animation: scaleIn 1s ease-in-out;
+        }
+
+        .horse-details h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .horse-details p {
+            font-size: 1.2rem;
+            color: #9ca3af;
+        }
+
+        .horse-details ul {
+            text-align: left;
+            margin-top: 20px;
+            padding-left: 0;
+            list-style-type: none;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        .horse-details ul li {
+            background: #1f2937;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+
+        .horse-details ul li::before {
+            content: "✔";
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        .purchase-btn {
+            background-color: #38bdf8;
+            color: #ffffff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            animation: bounceIn 1.5s infinite ease-in-out;
+        }
+
+        .purchase-btn:hover {
+            background-color: #1e3a8a;
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="horse-details">
+        <img id="horseImage" src="https://via.placeholder.com/800x400" alt="Horse Image">
+        <h2 id="horseName">Loading...</h2>
+        <p id="horseLocation">Location: Loading...</p>
+        <ul id="horseDetailsList">
+            <!-- Details will be dynamically inserted here -->
+        </ul>
+        <button class="purchase-btn" onclick="purchaseHorse()">Purchase</button>
+    </div>
+
+    <script>
+        // Get the horse ID from the query parameter
+        const queryParams = new URLSearchParams(window.location.search);
+        const horseId = queryParams.get("id");
+
+        // Fetch horse details from the database using an API
+        async function fetchHorseDetails() {
+            try {
+                const response = await fetch(`http://localhost:3000/horses/${horseId}`);
+                const horse = await response.json();
+
+                // Update the page content with the horse details
+                document.getElementById("horseImage").src = horse.image || "https://via.placeholder.com/800x400";
+                document.getElementById("horseName").textContent = horse.name || "Unknown Horse";
+                document.getElementById("horseLocation").textContent = `Location: ${horse.location || "Unknown"}`;
+
+                const detailsList = document.getElementById("horseDetailsList");
+                const details = [
+                    `Health: ${horse.health_status || "Unknown"}`,
+                    `Temperament: ${horse.temperament || "Unknown"}`,
+                    `Training: ${horse.training_level || "Unknown"}`,
+                    `Age: ${horse.age || "Unknown"} years`,
+                    `Breed: ${horse.breed || "Unknown"}`,
+                    `Performance History: ${horse.performance_history || "None"}`,
+                    `Maintenance Costs: ${horse.maintenance_cost || "Unknown"}$`,
+                    `price: ${horse.price || "Unknown"}$`
+                ];
+
+                details.forEach(detail => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = detail;
+                    detailsList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error("Error fetching horse details:", error);
+                alert("Failed to load horse details. Please try again later.");
+            }
+        }
+
+        // Call the function to fetch and render horse details
+        fetchHorseDetails();
+
+        // Redirect to the purchase page
+        function purchaseHorse() {
+            window.location.href = `purchase.html?id=${horseId}`;
+        }
+    </script>
+</body>
+
+</html>

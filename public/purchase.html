@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Horse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 50px auto;
+            max-width: 800px;
+            background: #1f2937;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: #38bdf8;
+            margin-bottom: 20px;
+        }
+
+        h4 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: 20px;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #9ca3af;
+            font-weight: bold;
+        }
+
+        .form-control, .btn-primary {
+            border-radius: 10px;
+        }
+
+        .form-control {
+            background: #ffffff; /* Set a light background color */
+            color: #000000; /* Set a dark text color */
+            border: 1px solid #555; /* Optional: keep border for better visibility */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        .form-control::placeholder {
+            color: #888888;
+        }
+
+        .form-control:focus {
+            border: 2px solid #38bdf8;
+            box-shadow: none;
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .btn-primary {
+            background: #38bdf8;
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #1e3a8a;
+            transform: scale(1.05);
+        }
+
+        .summary-card {
+            background: #2d3748;
+            border-radius: 10px;
+            padding: 20px;
+            color: #f5f5f5;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .summary-card h5, .summary-card p {
+            margin: 5px 0;
+        }
+
+        .summary-card h5 {
+            font-size: 1.5rem;
+            color: #38bdf8;
+        }
+
+        .summary-card p {
+            font-size: 1.2rem;
+        }
+
+        .footer {
+            background: #1f2937;
+            color: #9ca3af;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+            border-top: 1px solid #374151;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Complete Your Purchase</h2>
+
+        <!-- Horse Summary -->
+        <div class="summary-card">
+            <h5 id="horseName">Horse Name: Loading...</h5>
+            <p id="horsePrice">Price: Loading...</p>
+        </div>
+
+        <!-- Buyer Information -->
+        <h4>Buyer Information</h4>
+        <form id="purchaseForm">
+            <div class="mb-3">
+                <label for="fullName" class="form-label">Full Name</label>
+                <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your email address" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" id="phone" class="form-control" placeholder="Enter your phone number" required>
+            </div>
+
+            <!-- Payment Details -->
+            <h4>Payment Details</h4>
+            <div class="mb-3">
+                <label for="cardNumber" class="form-label">Card Number</label>
+                <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="expiryDate" class="form-label">Expiry Date</label>
+                    <input type="text" id="expiryDate" class="form-control" placeholder="MM/YY" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="cvv" class="form-label">CVV</label>
+                    <input type="text" id="cvv" class="form-control" placeholder="123" required>
+                </div>
+            </div>
+
+            <!-- Billing Address -->
+            <h4>Billing Address</h4>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" id="address" class="form-control" placeholder="123 Main Street" required>
+            </div>
+            <div class="mb-3">
+                <label for="city" class="form-label">City</label>
+                <input type="text" id="city" class="form-control" placeholder="Enter your city" required>
+            </div>
+            <div class="mb-3">
+                <label for="postalCode" class="form-label">Postal Code</label>
+                <input type="text" id="postalCode" class="form-control" placeholder="Enter your postal code" required>
+            </div>
+            <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" id="country" class="form-control" placeholder="Enter your country" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Complete Purchase</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 Horse Auction. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const queryParams = new URLSearchParams(window.location.search);
+        const horseId = queryParams.get("id");
+        let horsePrice = 0; // To store the horse price fetched from the API
+        let horseName = ""; // To store the horse name fetched from the API
+    
+        async function fetchHorseDetails() {
+            if (!horseId) {
+                alert("Invalid horse ID.");
+                return;
+            }
+    
+            try {
+                const response = await fetch(`http://localhost:3000/horses/${horseId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch horse details.");
+                }
+                const horse = await response.json();
+    
+                horsePrice = horse.price;
+                horseName = horse.name;
+    
+                // Populate horse details
+                document.getElementById("horseName").textContent = `Horse Name: ${horse.name || "Unknown"}`;
+                document.getElementById("horsePrice").textContent = `Price: $${horse.price || "0.00"}`;
+            } catch (error) {
+                console.error("Error fetching horse details:", error);
+                alert("Failed to load horse details.");
+            }
+        }
+    
+        document.getElementById("purchaseForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+    
+            const fullName = document.getElementById("fullName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const cardNumber = document.getElementById("cardNumber").value.trim();
+            const expiryDate = document.getElementById("expiryDate").value.trim();
+            const cvv = document.getElementById("cvv").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const city = document.getElementById("city").value.trim();
+            const postalCode = document.getElementById("postalCode").value.trim();
+            const country = document.getElementById("country").value.trim();
+    
+            const purchaseData = {
+                horseId,
+                horseName,
+                purchasePrice: horsePrice, // Include the price of the horse
+                buyerName: fullName,
+                buyerEmail: email,
+                buyerPhone: phone,
+                cardNumber: cardNumber.slice(-4), // Mask or send last 4 digits only
+                address,
+                city,
+                postalCode,
+                country,
+            };
+    
+            try {
+                const response = await fetch("http://localhost:3000/purchase", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(purchaseData),
+                });
+    
+                const result = await response.json();
+    
+                if (response.ok) {
+                    // Show success message professionally
+                    const modal = document.createElement("div");
+                    modal.innerHTML = `
+                        <div style="
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgba(0, 0, 0, 0.8);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            z-index: 1000;
+                        ">
+                            <div style="
+                                background: black;
+                                padding: 30px;
+                                border-radius: 10px;
+                                text-align: center;
+                                max-width: 500px;
+                                width: 90%;
+                                font-family: Arial, sans-serif;
+                            ">
+                                <h2 style="color: #4CAF50; margin-bottom: 20px;">🎉 Purchase Successful! 🎉</h2>
+                                <p>Thank you for purchasing <strong>${result.horseName}</strong>.</p>
+                                <p>Redirecting to the home page...</p>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+    
+                    // Redirect after 5 seconds
+                    setTimeout(() => {
+                        window.location.href = "home.html";
+                    }, 5000);
+                } else {
+                    throw new Error(result.error || "Failed to complete purchase.");
+                }
+            } catch (error) {
+                console.error("Error completing purchase:", error);
+                alert("Failed to complete the purchase. Please try again.");
+            }
+        });
+    
+        // Fetch horse details on page load
+        fetchHorseDetails();
+    </script>
+    
+    
+</body>
+
+</html>

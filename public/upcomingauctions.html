@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Auctions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1f2937, #0d1117);
+            color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 50px auto;
+            max-width: 1200px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: #38bdf8;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        table th {
+            background: #333;
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        table tr:nth-child(even) {
+            background: #2d3748;
+        }
+
+        table tr:nth-child(odd) {
+            background: #1f2937;
+        }
+
+        table tr:hover {
+            
+            color: #fff;
+        }
+
+        table td {
+            color: #9ca3af;
+        }
+
+        .btn-back {
+            background: #38bdf8;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        .btn-back:hover {
+            background: #1e3a8a;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            background: #1f2937;
+            color: #9ca3af;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+            border-top: 1px solid #374151;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Upcoming Horse Auctions</h1>
+
+        <table id="auctionTable">
+            <thead>
+                <tr>
+                    <th>Seller Name</th>
+                    <th>Date of Auction</th>
+                    <th>Horse Name</th>
+                    <th>Breed</th>
+                    <th>Location</th>
+                    <th>Age</th>
+                    <th>Health</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        
+
+        <a href="home.html" class="btn-back">Back to Home</a>
+    </div>
+
+    <footer class="footer">
+        <p>© 2024 Horse Auction. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Simulating API data fetch
+        const fetchAuctions = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/upcoming-auctions'); // Replace with your API endpoint
+                if (!response.ok) {
+                    throw new Error('Failed to fetch auctions');
+                }
+                const auctions = await response.json();
+                populateTable(auctions);
+            } catch (error) {
+                console.error('Error fetching auction details:', error);
+                alert('Failed to load auction details.');
+            }
+        };
+
+        const populateTable = (auctions) => {
+            const tableBody = document.getElementById('auctionTable').getElementsByTagName('tbody')[0];
+            if (!tableBody) {
+                console.error("Table body not found.");
+                return;
+            }
+
+            // Clear any existing rows
+            tableBody.innerHTML = '';
+
+            auctions.forEach(auction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${auction.seller_name}</td>
+                    <td>${new Date(auction.auction_date).toLocaleDateString()}</td>
+                    <td>${auction.horse_name}</td>
+                    <td>${auction.breed}</td>
+                    <td>${auction.location}</td>
+                    <td>${auction.age} years</td>
+                    <td>${auction.health}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        };
+
+        // Load auctions on page load
+        fetchAuctions();
+    </script>
+</body>
+
+</html>
