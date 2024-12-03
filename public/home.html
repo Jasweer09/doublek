@@ -275,65 +275,93 @@
     </footer>
 
     <script>
-    let currentPage = 1; // To track the current page of data
-    const cardsPerPage = 4; // Number of cards to display per load
-
-    async function loadHorses() {
-        try {
-            const response = await fetch(`/api/horses?page=${currentPage}`);
-            const horses = await response.json();
-            const cardsSection = document.getElementById('cardsSection');
-            const viewMoreButton = document.getElementById('viewMoreButton');
-
-            if (!horses || horses.length === 0) {
-                // Hide the "View More" button if no more horses are available
-                viewMoreButton.style.display = 'none';
-                return;
+        let currentPage = 1; // To track the current page of data
+        const cardsPerPage = 4; // Number of cards to display per load
+    
+        // Function to check if a URL is valid
+        function isValidUrl(url) {
+            try {
+                new URL(url); // Try to create a URL object
+                return true;
+            } catch (e) {
+                return false; // If URL creation fails, it's not a valid URL
             }
-
-            horses.slice(0, cardsPerPage).forEach((horse) => {
-                const card = document.createElement('div');
-                card.classList.add('card');
-                card.innerHTML = `
-                    <img src="${horse.image || 'https://via.placeholder.com/300x200'}" alt="${horse.name}">
-                    <div class="card-body">
-                        <h5>${horse.name}</h5>
-                        <p>${horse.location}</p>
-                        <p class="price">${horse.price}$</p>
-                    </div>
-                `;
-
-                // Add click event to redirect to the horse details page
-                card.addEventListener('click', () => {
-                    console.log(horse.horse_id);
-                    window.location.href = `horse-details.html?id=${horse.horse_id}`;
-                });
-
-                cardsSection.appendChild(card);
-            });
-
-            // Increment current page for next batch of horses
-            currentPage++;
-
-            // Hide the "View More" button if fewer than 4 horses are loaded
-            if (horses.length < cardsPerPage) {
-                viewMoreButton.style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Error loading horses:', error);
         }
-    }
-
-    // Load the first set of cards on page load
-    document.addEventListener('DOMContentLoaded', () => {
-        loadHorses();
-    });
-
-    // Attach event listener to "View More" button
-    document.getElementById('viewMoreButton').addEventListener('click', () => {
-        loadHorses();
-    });
-</script>
+    
+        // Function to load horses
+        async function loadHorses() {
+            try {
+                const response = await fetch(`/api/horses?page=${currentPage}`);
+                const horses = await response.json();
+                const cardsSection = document.getElementById('cardsSection');
+                const viewMoreButton = document.getElementById('viewMoreButton');
+    
+                if (!horses || horses.length === 0) {
+                    // Hide the "View More" button if no more horses are available
+                    viewMoreButton.style.display = 'none';
+                    return;
+                }
+    
+                horses.slice(0, cardsPerPage).forEach((horse) => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    
+                    const image = document.createElement('img');
+                    image.alt = horse.name;
+                    
+                    // Check if image_url is available and is valid
+                    if (horse.image_url && isValidUrl(horse.image_url)) {
+                        image.src = horse.image_url;
+                        console.log(image.src);
+                    } else {
+                        image.src = 'https://via.placeholder.com/300x200'; // Fallback image
+                    }
+    
+                    // Insert image dynamically and build the card content
+                    card.innerHTML = `
+                        <div class="card-body">
+                            <h5>${horse.name}</h5>
+                            <p>${horse.location}</p>
+                            <p class="price">${horse.price}$</p>
+                        </div>
+                    `;
+    
+                    // Add the image to the card
+                    card.insertBefore(image, card.firstChild);
+    
+                    // Add click event to redirect to the horse details page
+                    card.addEventListener('click', () => {
+                        console.log(horse.horse_id);
+                        window.location.href = `horse-details.html?id=${horse.horse_id}`;
+                    });
+    
+                    cardsSection.appendChild(card);
+                });
+    
+                // Increment current page for the next batch of horses
+                currentPage++;
+    
+                // Hide the "View More" button if fewer than 4 horses are loaded
+                if (horses.length < cardsPerPage) {
+                    viewMoreButton.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error loading horses:', error);
+                alert('Failed to load horses. Please try again later.');
+            }
+        }
+    
+        // Load the first set of cards on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHorses();
+        });
+    
+        // Attach event listener to "View More" button
+        document.getElementById('viewMoreButton').addEventListener('click', () => {
+            loadHorses();
+        });
+    </script>
+    
 
     
 </body>
