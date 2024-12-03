@@ -130,7 +130,7 @@
         // Simulating API data fetch
         const fetchAuctions = async () => {
             try {
-                const response = await fetch('http://localhost:3000/upcoming-auctions'); // Replace with your API endpoint
+                const response = await fetch('/upcoming-auctions'); // Replace with your API endpoint
                 if (!response.ok) {
                     throw new Error('Failed to fetch auctions');
                 }
