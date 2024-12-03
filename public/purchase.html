@@ -214,7 +214,7 @@
             }
     
             try {
-                const response = await fetch(`http://localhost:3000/horses/${horseId}`);
+                const response = await fetch(`/horses/${horseId}`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch horse details.");
                 }
