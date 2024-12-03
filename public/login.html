@@ -173,8 +173,14 @@
         });
 
         const result = await response.json();
+        console.log(result);
 
         if (response.ok) {
+            localStorage.setItem('userID', result.user.user_id);
+            localStorage.setItem('firstName', result.user.first_name);
+            localStorage.setItem('lastName', result.user.last_name);
+            localStorage.setItem('email', result.user.email);
+            localStorage.setItem('phone', result.user.phone);
             window.location.href = '/home'; // Redirect to dashboard or desired page
         } else if (response.status === 401) {
             errorMessage.textContent = 'Incorrect email or password.';
