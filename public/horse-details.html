@@ -161,7 +161,7 @@
                 const horse = await response.json();
 
                 // Update the page content with the horse details
-                document.getElementById("horseImage").src = horse.image || "https://via.placeholder.com/800x400";
+                document.getElementById("horseImage").src = horse.image_url || "https://via.placeholder.com/800x400";
                 document.getElementById("horseName").textContent = horse.name || "Unknown Horse";
                 document.getElementById("horseLocation").textContent = `Location: ${horse.location || "Unknown"}`;
 
