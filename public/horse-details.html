@@ -157,7 +157,7 @@
         // Fetch horse details from the database using an API
         async function fetchHorseDetails() {
             try {
-                const response = await fetch(`http://localhost:3000/horses/${horseId}`);
+                const response = await fetch(`/horses/${horseId}`);
                 const horse = await response.json();
 
                 // Update the page content with the horse details
