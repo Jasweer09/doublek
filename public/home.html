@@ -61,22 +61,53 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .header .cta-button {
-            background-color: #38bdf8;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+        /* User Dropdown */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
         }
 
-        .header .cta-button:hover {
-            background-color: #1e3a8a;
-            transform: scale(1.1);
+        .user-dropdown button {
+            background-color: transparent;
+            color: #ffffff;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
         }
+
+        .user-dropdown button img {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .user-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #1f2937;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            min-width: 150px;
+            border-radius: 5px;
+        }
+
+        .user-dropdown-content a {
+            color: #ffffff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .user-dropdown-content a:hover {
+            background-color: #38bdf8;
+            color: #000;
+        }
+
+        
 
         /* Hero Banner */
         .hero {
@@ -87,7 +118,6 @@
             text-align: center;
             color: #ffffff;
             position: relative;
-            
         }
 
         .hero::after {
@@ -134,7 +164,6 @@
             background: #1e3a8a;
             transform: scale(1.05);
         }
-
         /* Cards Section */
         .cards-section {
             padding: 50px 5%;
@@ -210,7 +239,37 @@
         padding: 50px 5%;
         text-align: center;
     }
+    /* Profile Modal Styling */
+.modal-content {
+    background-color: #1f2937; /* Dark background */
+    color: #f0f0f0; /* Light text color */
+}
 
+.modal-header {
+    border-bottom: 1px solid #374151; /* Light border */
+}
+
+.modal-body {
+    color: #f0f0f0; /* Light text in the modal body */
+}
+
+.modal-title {
+    color: #38bdf8; /* Highlighted title color */
+}
+
+.modal-body span {
+    color: #ffffff; /* Ensure text inside the modal body is white */
+}
+
+.modal-footer button {
+    background-color: #38bdf8; /* Button color */
+    color: #000000; /* Text color on the button */
+}
+
+.modal-footer button:hover {
+    background-color: #1e3a8a; /* Hover state for the button */
+    color: #ffffff; /* Text color on hover */
+}
     </style>
 </head>
 
@@ -226,8 +285,19 @@
             <a href="#aboutSection">About</a>
             <a href="#contactSection">Contact</a>
         </nav>
-        <button class="cta-button">Join Now</button>
+        
+        <!-- User Info Dropdown -->
+        <div class="user-dropdown">
+            <button class="btn dropdown-toggle text-white" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle me-1"></i> <span id="userName">User</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="#" id="profileLink">Profile</a></li>
+                <li><a class="dropdown-item" href="#" id="logoutLink">Logout</a></li>
+            </ul>
+        </div>
     </header>
+    
 
     <!-- Buy Your Dream Horse Section -->
     <section class="cards-section" id="buySection">
@@ -268,12 +338,31 @@
         <p>Address: 123 Equestrian Lane, Horseville, USA</p>
     </section>
     
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>First Name:</strong> <span id="profileFirstName">John</span></p>
+                    <p><strong>Last Name:</strong> <span id="profileLastName">Doe</span></p>
+                    <p><strong>User ID:</strong> <span id="profileUserId">UserId</span></p>
+                    <p><strong>Email ID:</strong> <span id="profileEmail">Test@gmail.com</span></p>
+                    <p><strong>Phone No:</strong> <span id="profilePhone">1234567890</span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
         <p>© 2024 Horse Auction. All rights reserved.</p>
     </footer>
-
     <script>
         let currentPage = 1; // To track the current page of data
         const cardsPerPage = 4; // Number of cards to display per load
@@ -360,10 +449,56 @@
         document.getElementById('viewMoreButton').addEventListener('click', () => {
             loadHorses();
         });
+    
+        // User Info Handling (Profile & Logout)
+        document.addEventListener("DOMContentLoaded", function () {
+    // Profile Modal instance
+    const profileModalElement = document.getElementById('profileModal');
+    const profileModal = new bootstrap.Modal(profileModalElement);  // Use bootstrap.Modal to handle the modal
+
+    document.getElementById('profileLink').addEventListener('click', function() {
+        // Get user info from local storage (you can adjust to get real data)
+        const firstName = localStorage.getItem("firstName") || "John";
+        const lastName = localStorage.getItem("lastName") || "Doe";
+        const userId = localStorage.getItem("userID") || "UserId";
+        const email = localStorage.getItem("email") || "Test@gmail.com";
+        const phone = localStorage.getItem("phone") || "0123456789";
+
+        // Populate modal with user information
+        document.getElementById('profileFirstName').textContent = firstName;
+        document.getElementById('profileLastName').textContent = lastName;
+        document.getElementById('profileUserId').textContent = userId;
+        document.getElementById('profileEmail').textContent = email;
+        document.getElementById('profilePhone').textContent = phone;
+
+        // Show the modal
+        profileModal.show();  // This will open the modal
+    });
+
+    // Ensure the modal backdrop is removed when the modal is closed
+    profileModalElement.addEventListener('hidden.bs.modal', function () {
+        document.body.classList.remove('modal-open'); // Ensures body scroll is restored
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+    });
+
+    // Logout functionality
+    document.getElementById('logoutLink').addEventListener('click', function() {
+        localStorage.clear(); // Clear user data
+        sessionStorage.clear(); // Clear session storage
+        window.location.replace('/login.html'); // Redirect to login page
+    });
+
+    // Prevent back navigation after logout
+    window.onpageshow = function(event) {
+        if (event.persisted) {
+            window.location.replace('/login.html');
+        }
+    };
+});
+
     </script>
     
-
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
