@@ -180,7 +180,7 @@ app.post('/api/login', async (req, res) => {
         }
 
         // Respond with a success message or token
-        return res.status(200).json({ message: 'Login successful.', userId: user.user_id });
+        return res.status(200).json({ message: 'Login successful.', userId: user.user_id , user});
     } catch (error) {
         console.error('Login Error:', error);
         return res.status(500).json({ message: 'Unexpected error occurred.' });
